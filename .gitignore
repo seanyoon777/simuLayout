@@ -1,0 +1,13 @@
+# .gitignore
+
+.DS_Store
+
+.conda/
+
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+.ipynb_checkpoints/
+*.ipynb
