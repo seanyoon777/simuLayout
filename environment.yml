@@ -1,0 +1,11 @@
+name: simuLayout
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy>=1.25.2
+  - pandas>=2.1.0
+  - matplotlib>=3.7.0
+  - pillow>=9.4.0
+  - ezdxf>=1.0.3
+  - tqdm>=4.65.0

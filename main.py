@@ -12,12 +12,14 @@ def main():
     parser.add_argument("-d", "--destination", type = str, required = True,
                         help="Destination path to save results.")
     
-    parser.add_argument("--nagents", type = int, default = 2500,
-                        help="Number of agents (Default 2500)")
+    parser.add_argument("--nagents", type = int, default = 1000,
+                        help="Number of agents (Default 1000)")
+    parser.add_argument("--time", type = int, default = 100,
+                    help="Duration of the simulation (Default 100)")
     
     args = parser.parse_args()
 
-    runSimulation(args.layout, args.storedata, args.destination, agent_num = args.nagents)
+    runSimulation(args.layout, args.storedata, args.destination, agent_num = args.nagents, time = args.time)
 
 if __name__ == '__main__':
     main()

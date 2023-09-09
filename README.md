@@ -8,55 +8,62 @@ Last October, a devastating tragedy struck my hometown South Korea, where a fata
 </p>
 While diving into the topic, I came across a shockingly long list of such tragedies, from the 1990 Mecca tragedy in Saudi Arabia with 2,300 lost lives to the 1989 Hillsborough disaster that took 97. Shockingly, even events as familiar to us as Black Friday sales see similar incidents in large retail stores. 
 
-Back in 2019, my friends and I had drafted a crowd collapse simulation paper using multi-agent simulations ([available HERE]()) as part of a mathematical modelling competition. With the fresh pain of the recent Halloween incident, I was compelled to revisit our work and develop a more robust software to predict crowd movements in navigation environments (scenarios where agents have obstacles and destinations). 
-
-## Model 
-The simulation seeks to predict the movement of agents within a store, based on data given about the store. 
+Back in 2019, my friends and I had drafted a crowd collapse simulation paper using multi-agent simulations ([available HERE](https://www.seanyoonbio.com/_files/ugd/577e3b_b281bd087e224daca0bd597c9abb0c5f.pdf)) as part of a mathematical modelling competition. With the fresh pain of the recent Halloween incident, I was compelled to revisit our work and develop a more robust software to predict crowd movements in navigation environments (scenarios where agents have obstacles and destinations). 
 
 ## User Input and Example Output
-The software will return a gif simulation in a specified directory, with a randomly generated SLURM-job-id-esque `unique_id` to avoid confusion. The inputs are as follows: 
-- `-l` flag: The rankings of each athlete and their overall performance indicators. 
-- `-l` flag: The rankings of each athlete and their overall performance indicators. 
-- `-d` flag: The rankings of each athlete and their overall performance indicators. 
-- (Optional) `-l` flag: The rankings of each athlete and their overall performance indicators. 
-The simulation is dependent on the layout 
-from bird eye view. 
-DXF files and PNG files for 
-
-It then produces a gif simulation in your directory. An example screenshot of the simulation is provided below: 
+The software will return a gif simulation in your directory, with a randomly generated SLURM-job-id-esque `unique_id` to avoid confusion. The simulation will look something like this: 
 <p align="center">
-  <img src="images/examplesimulation.png" alt="Example simulation" width="600"/>
+  <img src="images/examplesimulation.png" alt="Example simulation" width="800"/>
   <br>Screenshots of Example Simulation (t = 120)
 </p>
-examplesimulation.png
+To do so, the inputs are as follows: 
+- `-l` flag: A birds eye view of the store layout, in png, jpg, or dxf format. 
+- `-s` flag: Store data file (elaborated below) in csv format. 
+- `-d` flag: The destination to store the output gif file. 
+- (Optional) `--nagents` flag: Specifies the number of agents. (Default 1000)
+- (Optional) `--time` flag: Specifies the duration of the simulation, in seconds. (Default 100)
+Note that the model utilizes a customized A* algorithm that accounts for collision detection and intra-agent path prediction, and thus the worst case time complexity is $O(b^d)$. Note that runtime will significantly get longer as the number of agents increase. 
+
+### Store data
+The software requires a very specific format of the store data, as it is used to dynamically predict the popularity of each item during a sale event. The columns are chosen as factors widely considered to impact item popularity, such as rating, discount, and scarcity. Specifically, it requires the columns `Item`, the names of each product; `Rating`, a user rating of the products (preferrably out of 5); `Regular Price` and `Discount Price`, the prices of each product prior to and during the event respectively; and `Quantity`, the available stocks for each product. An example dataset `store_data.csv` can be accessed in example_data. 
+
+An example store layout png file, `layout.png`, can also be found in example_data, although it is not required that the input image be grayscale. 
+
+## How does it work? 
+In the initialization step, the simulation first creates a prediction of the popularity for each item given the product data. Then, the agents are initialized in an "entrance" area, where each agent is assigned a target product drawn from a Gaussian distribution that is modified to fit the products' popularities. Then, each agent iteratively searches for the optimal path using a customized A* algorithm that takes into account collision prevention with obstacles and agents. 
+
 ## Usage
-This software is implemented in both C++ (faster, experimental) and Python. Either way, to use the software, 
+This software is implemented in both C++ (experimental, faster but more prone to bugs) and Python. Either way, to use the software, 
 1. Clone the repository onto your local machine: 
 ```
 git clone git@github.com:seanyoon777/simuLayout.git simuLayout
 ```
 You can replace the simuLayout with any directory path of your choice. 
 
-2. Now, set up the Conda environment. Most of the requirements are widely used packages, such as scipy or pandas, except `fpdf`. So run either 
-```
-conda install -c conda-forge fpdf
-```
-or 
+### Python Version: 
+2. Set up the Conda environment. Most of the requirements are widely used packages, such as scipy or pandas, except `fpdf`. So run either 
 ```
 conda env create -f environment.yml
 ```
 and run 
 ```
-conda activate papers
+conda activate simuLayout
+```
+3. Navigate into the current directory. 
+4. Run the command below on your terminal:
+```
+python main.py -l [layout file path] -s [store data file path] -d [directory you want to save your gif files]
+```
+### Experimental C++ Version: 
+The libraries required for the C++ implementation are default libraries, so there isn't a separate docker file. 
+2. Compile the files by running the command below on your terminal:
+```
+g++ main.cpp -I/headers -o simulation
+```
+3. Then run the command:
+```
+./simulation -l [path to layout] -s [path to store data] -d [path to destination] --nagents [number of agents] --time [simulation duration]
 ```
 
-3. Navigate into the current directory. 
-
-4. The input data should be a csv file with seven columns: `Year`, `Player1`, `Country1`, `Player2`, `Country2`, `Score1`, `Score2`. `Year` is the year the match had taken place, and `Player1` and `Player2` is the player name or equivalent uniquely identifiable name. `Score1` and `Score2` are scores for each player in the given match. `Country1` and `Country2` should be the country codes for players, although it is only for player identification purposes. 
-
-5. To use the model, run the below command on your terminal: 
-### Experimental Version: 
-
-
-### Python Version: 
-
+## Acknowledgements
+The initial paper was drafted by Sean Yoon, Moonhyuk Chang, Yuree Oh, and Yeeun Park, with equal contribution. Also, the stb library used for the C++ implementation was developed by Sean Barrett ([available HERE](https://github.com/nothings/stb)). 

@@ -6,7 +6,7 @@ from modules.agents import *
 from PIL import Image, ImageSequence
 from tqdm import tqdm
 
-TIME = 1000
+TIME = 100
 
 def generateID(n = 7): 
     range_start = 10**(n - 1)
