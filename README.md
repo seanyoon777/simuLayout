@@ -8,7 +8,7 @@ Last October, a devastating tragedy struck my hometown South Korea, where a fata
 </p>
 While diving into the topic, I came across a shockingly long list of such tragedies, from the 1990 Mecca tragedy in Saudi Arabia with 2,300 lost lives to the 1989 Hillsborough disaster that took 97. Shockingly, even events as familiar to us as Black Friday sales see similar incidents in large retail stores. 
 
-Back in 2019, my friends and I had drafted a crowd collapse simulation paper using multi-agent simulations ([available HERE](https://www.seanyoonbio.com/_files/ugd/577e3b_b281bd087e224daca0bd597c9abb0c5f.pdf)) as part of a mathematical modelling competition. With the fresh pain of the recent Halloween incident, I was compelled to revisit our work and develop a more robust software to predict crowd movements in navigation environments (scenarios where agents have obstacles and destinations). 
+In 2019, my friends and I had drafted a crowd collapse simulation paper using multi-agent simulations ([available HERE](https://www.seanyoonbio.com/_files/ugd/577e3b_b281bd087e224daca0bd597c9abb0c5f.pdf)) as part of a mathematical modelling competition. With the fresh pain of the recent Halloween incident, I was compelled to revisit our work and develop a more robust software to predict crowd movements in navigation environments (scenarios where agents have obstacles and destinations). 
 
 ## User Input and Example Output
 The software will return a gif simulation in your directory, with a randomly generated SLURM-job-id-esque `unique_id` to avoid confusion. The simulation will look something like this: 
@@ -17,11 +17,13 @@ The software will return a gif simulation in your directory, with a randomly gen
   <br>Screenshots of Example Simulation (t = 120)
 </p>
 To do so, the inputs are as follows: 
+
 - `-l` flag: A birds eye view of the store layout, in png, jpg, or dxf format. 
 - `-s` flag: Store data file (elaborated below) in csv format. 
 - `-d` flag: The destination to store the output gif file. 
 - (Optional) `--nagents` flag: Specifies the number of agents. (Default 1000)
 - (Optional) `--time` flag: Specifies the duration of the simulation, in seconds. (Default 100)
+
 Note that the model utilizes a customized A* algorithm that accounts for collision detection and intra-agent path prediction, and thus the worst case time complexity is $O(b^d)$. Note that runtime will significantly get longer as the number of agents increase. 
 
 ### Store data
@@ -55,7 +57,8 @@ conda activate simuLayout
 python main.py -l [layout file path] -s [store data file path] -d [directory you want to save your gif files]
 ```
 ### Experimental C++ Version: 
-The libraries required for the C++ implementation are default libraries, so there isn't a separate docker file. 
+The libraries required for the C++ implementation are default libraries, so there isn't a separate docker file.
+
 2. Compile the files by running the command below on your terminal:
 ```
 g++ main.cpp -I/headers -o simulation
