@@ -66,7 +66,6 @@ class Grid:
         return self.grid[index]
     
     def plot(self):
-
         grid_array = np.array([[color_map[tile.type] for tile in row] for row in self.grid])
         fig, ax = plt.subplots(figsize=(10, 10))
         ax.imshow(grid_array)
